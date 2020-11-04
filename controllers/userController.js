@@ -45,12 +45,24 @@ userController.getById = (req, res) => {
   if (userFound) {
     res.json(userFound);
   } else {
-    res.send("No existe el usuario");
+    res.status(404).send("No existe el usuario");
+  }
+};
+
+userController.getByRole = (req, res) => {
+  const { role } = req.params;
+
+  const usersFound = users.filter((user) => user.role == role);
+
+  if (usersFound) {
+    res.json(usersFound);
+  } else {
+    res.status(404).send("No hay usuarios con ese rol");
   }
 };
 
 userController.post = (req, res) => {
-  const { email, password, role, name, score, description } = req.body;
+  const { email, password, role } = req.body;
 
   const userFound = users.find((userF) => userF.email === email);
 
@@ -62,15 +74,22 @@ userController.post = (req, res) => {
 
       var user = {};
 
-      const expectedParams = [ "email", "password", "role", "name", "score", "description" ];
+      const expectedParams = [
+        "email",
+        "password",
+        "role",
+        "name",
+        "score",
+        "description",
+      ];
       Object.keys(req.body).forEach((p) => {
         if (expectedParams.includes(p)) {
           user[p] = req.body[p];
         }
       });
 
-      user = {id, ...user}
-      
+      user = { id, ...user };
+
       users.push(user);
 
       res.json(users[id - 1]);
@@ -80,7 +99,7 @@ userController.post = (req, res) => {
   }
 };
 
-userController.put = (req, res) => {
+userController.patch = (req, res) => {
   const { id } = req.params;
   const userFound = users.find((userF) => userF.id == id);
 
@@ -100,7 +119,7 @@ userController.put = (req, res) => {
     });
     res.json(userFound);
   } else {
-    res.send("el usuario que desea actualizar no existe");
+    res.status(404).send("el usuario que desea actualizar no existe");
   }
 };
 
