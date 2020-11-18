@@ -47,6 +47,4 @@ app.get('*', (req, res) => {
     res.status(404).sendFile(path.join(__dirname, '../public/index.html'))
 })
 
-app.listen(app.get('port'), () => {
-  console.log(`Servidor en puerto ${app.get('port')}`);
-});
+module.exports = app

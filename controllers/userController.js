@@ -67,10 +67,10 @@ userController.post = (req, res) => {
   const userFound = users.find((userF) => userF.email === email);
 
   if (userFound) {
-    res.send("el email ya existe");
+    res.status(400).send("el email ya existe");
   } else {
     if (email && password && role) {
-      const id = users.length + 1;
+      const id = users[users.length-1].id + 1;
 
       var user = {};
 
@@ -94,13 +94,14 @@ userController.post = (req, res) => {
 
       res.json(users[id - 1]);
     } else {
-      res.send("Datos incompletos");
+      res.status(400).send("Datos incompletos");
     }
   }
 };
 
 userController.patch = (req, res) => {
   const { id } = req.params;
+  const query = req.query;
   const userFound = users.find((userF) => userF.id == id);
 
   if (userFound) {
@@ -130,9 +131,9 @@ userController.delete = (req, res) => {
   if (index !== -1) {
     const idDelete = users[index].id;
     users.splice(index, 1);
-    res.send(`Se elimino el usuario con el id ${idDelete}`);
+    res.status(200).send(`Se elimino el usuario con el id ${idDelete}`);
   } else {
-    res.send("el usuario que desea actualizar no existe");
+    res.status(400).send("el usuario que desea actualizar no existe");
   }
 };
 
